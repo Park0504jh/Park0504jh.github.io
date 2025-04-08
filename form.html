@@ -1,106 +1,119 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>구글 앱스 스크립트로 정보 전달</title>
-    <style>
-      body {
-        display: flex;
-        justify-content: center;
-        padding-top: 50px;
-      }
-      form {
-        width: 400px;
-      }
-      fieldset {
-        margin-bottom: 20px;
-      }
-      label {
-        display: block;
-        margin-top: 10px;
-        font-weight: bold;
-      }
-      legend {font-weight: bold; font-size: large;}
-    </style>
-    <script>
-      function submitForm(event) {
-        event.preventDefault();
-    
-        const email = document.getElementById("email").value;
-        const name = document.getElementById("name").value;
-        const message = document.getElementById("message").value;
-    
-        fetch("https://script.google.com/macros/s/AKfycbzxK4bQtTmP7iI7fUHy07EQ6jsUG_Mm666xo29bt4Z594fl_IjbxY7GH8NBD1ZKk7fe/exec", {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: `email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&message=${encodeURIComponent(message)}`
-        }).then(response => {
-          alert("정보가 성공적으로 전송되었습니다!");
-        }).catch(error => {
-          alert("전송 실패: " + error.message);
-        });
-      }
-    </script>
-    
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <title>구글 앱스 스크립트로 정보 전달</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      padding-top: 50px;
+    }
+    form {
+      width: 400px;
+    }
+    fieldset {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    legend {
+      font-weight: bold;
+      font-size: large;
+    }
+  </style>
+  <script>
+    function submitForm(event) {
+      event.preventDefault();
 
-  <body>
-    <form onsubmit="submitForm(event)">
-      <!-- 첫 번째 그룹 -->
-      <fieldset>
-        <legend>기본 정보</legend>
+      // 각 입력 요소에서 값 가져오기
+      const email = document.getElementById("email").value;
+      const name = document.getElementById("name").value;
+      const message = document.getElementById("message").value;
+      const major = document.getElementById("major").value;
+      const grade = document.getElementById("grade").value;
 
-        <!-- 이메일 형식 검사 -->
-        <label for="park0504jh@gmail.com">이메일:</label>
-        <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
+      // 라디오 버튼 - 성별
+      const gender = document.querySelector('input[name="gender"]:checked')?.value || "";
 
-        <!-- 한 줄 텍스트 (이름) -->
-        <label for="JH">이름:</label>
-        <input type="text" id="JH" name="name" placeholder="홍길동" required>
+      // 체크박스 - 재학 여부 (여러 개 가능)
+      const statusCheckboxes = document.querySelectorAll('input[name="status"]:checked');
+      const status = Array.from(statusCheckboxes).map(cb => cb.value).join(", ");
 
-        <!-- 라디오 버튼 -->
-          <label for="gender">성별:</label>
-          <input type="radio" name="gender" value="남성" required> 남성
-          <input type="radio" name="gender" value="여성"> 여성
-        <br><br>
+      // fetch로 서버에 전송
+      fetch("https://script.google.com/macros/s/AKfycbzxK4bQtTmP7iI7fUHy07EQ6jsUG_Mm666xo29bt4Z594fl_IjbxY7GH8NBD1ZKk7fe/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&gender=${encodeURIComponent(gender)}&status=${encodeURIComponent(status)}&major=${encodeURIComponent(major)}&grade=${encodeURIComponent(grade)}&message=${encodeURIComponent(message)}`
+      }).then(response => {
+        alert("정보가 성공적으로 전송되었습니다!");
+      }).catch(error => {
+        alert("전송 실패: " + error.message);
+      });
+    }
+  </script>
+</head>
 
-      <!-- 두 번째 그룹 -->
-      <fieldset>
-        <legend>추가 정보</legend>
+<body>
+  <form onsubmit="submitForm(event)">
+    <!-- 첫 번째 그룹 -->
+    <fieldset>
+      <legend>기본 정보</legend>
 
-        <!-- 체크박스 -->
-        <label for="univer">재학 여부:</label>
-        <input type="checkbox" value="재학"> 재학
-        <input type="checkbox" value="휴학"> 휴학
-        
-        <!-- datalist -->
-        <label for="major">전공:</label>
-        <input type="text" list="majors" placeholder="전공을 선택하거나 입력">
-        <datalist id="majors">
-          <option value="디소공"></option>
-          <option value="경영학"></option>
-          <option value="중어중문"></option>
-        </datalist>
+      <!--이메일 형식-->
+      <label for="email">이메일:</label>
+      <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
 
-        <!-- 콤보박스 -->
-        <label for="grade">학년:</label>
-        <select name="grade">
-          <option value="">학년을 선택하세요</option>
-          <option value="1학년">1학년</option>
-          <option value="2학년">2학년</option>
-          <option value="3학년">3학년</option>
-          <option value="4학년">4학년</option>
-        </select>
+      <!--한 줄 텍스트(이름)-->
+      <label for="name">이름:</label>
+      <input type="text" id="name" name="name" placeholder="홍길동" required>
 
-        <!-- 여러 줄 텍스트 -->
-        <label for="message">하고 싶은 말:</label>
-        <textarea id="message" name="message" rows="4" placeholder="자유롭게 입력하세요."></textarea>
-      </fieldset>
+      <!--라디오 버튼-->
+      <label>성별:</label>
+      <label><input type="radio" name="gender" value="남성" required> 남성</label>
+      <label><input type="radio" name="gender" value="여성"> 여성</label>
+    </fieldset>
 
-      <button type="submit">제출</button>
-    </form>
-  </body>
+    <!-- 두 번째 그룹 -->
+    <fieldset>
+      <legend>추가 정보</legend>
+
+      <!--체크박스-->
+      <label>재학 여부:</label>
+      <label><input type="checkbox" name="status" value="재학"> 재학</label>
+      <label><input type="checkbox" name="status" value="휴학"> 휴학</label>
+
+      <!--datalist-->
+      <label for="major">전공:</label>
+      <input type="text" list="majors" id="major" name="major" placeholder="전공을 선택하거나 입력">
+      <datalist id="majors">
+        <option value="디소공"></option>
+        <option value="경영학"></option>
+        <option value="중어중문"></option>
+      </datalist>
+
+      <!--콤보박스-->
+      <label for="grade">학년:</label>
+      <select name="grade" id="grade">
+        <option value="">학년을 선택하세요</option>
+        <option value="1학년">1학년</option>
+        <option value="2학년">2학년</option>
+        <option value="3학년">3학년</option>
+        <option value="4학년">4학년</option>
+      </select>
+
+      <!--여러 줄 텍스트-->
+      <label for="message">하고 싶은 말:</label>
+      <textarea id="message" name="message" rows="4" placeholder="자유롭게 입력하세요."></textarea>
+    </fieldset>
+
+    <button type="submit">제출</button>
+  </form>
+</body>
 </html>
