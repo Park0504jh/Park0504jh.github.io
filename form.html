@@ -23,20 +23,20 @@
       legend {font-weight: bold; font-size: large;}
     </style>
     <script>
-      function submitForm(evet) {
+      function submitForm(event) {
         event.preventDefault();
-
+    
         const email = document.getElementById("email").value;
         const name = document.getElementById("name").value;
         const message = document.getElementById("message").value;
-
+    
         fetch("https://script.google.com/macros/s/AKfycbzxK4bQtTmP7iI7fUHy07EQ6jsUG_Mm666xo29bt4Z594fl_IjbxY7GH8NBD1ZKk7fe/exec", {
           method: "POST",
           mode: "no-cors",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
           },
-          body: 'email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&message=${encodeURIComponent(message)}'
+          body: `email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&message=${encodeURIComponent(message)}`
         }).then(response => {
           alert("정보가 성공적으로 전송되었습니다!");
         }).catch(error => {
@@ -44,6 +44,7 @@
         });
       }
     </script>
+    
   </head>
 
   <body>
