@@ -26,8 +26,8 @@
       function submitForm(evet) {
         event.preventDefault();
 
-        const email = document.getElementById("park0504jh@gmail.com").value;
-        const name = document.getElementById("JH").value;
+        const email = document.getElementById("email").value;
+        const name = document.getElementById("name").value;
         const message = document.getElementById("message").value;
 
         fetch("https://script.google.com/macros/s/AKfycbzxK4bQtTmP7iI7fUHy07EQ6jsUG_Mm666xo29bt4Z594fl_IjbxY7GH8NBD1ZKk7fe/exec", {
@@ -36,7 +36,7 @@
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
           },
-          body: 'email=${encodeURIComponet(email)}&name=${encodeURIComponent(name)}&message=${encodeURIComponent(message)}'
+          body: 'email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&message=${encodeURIComponent(message)}'
         }).then(response => {
           alert("정보가 성공적으로 전송되었습니다!");
         }).catch(error => {
@@ -54,7 +54,7 @@
 
         <!-- 이메일 형식 검사 -->
         <label for="park0504jh@gmail.com">이메일:</label>
-        <input type="email" id="park0504jh@gmail.com" name="email" placeholder="example@gmail.com" required>
+        <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
 
         <!-- 한 줄 텍스트 (이름) -->
         <label for="JH">이름:</label>
